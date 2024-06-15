@@ -5,7 +5,7 @@ import {TraceIdUtil} from "../utils/trace-id.util";
 @Middleware({ type: 'before' })
 export class TraceIdLogger implements ExpressMiddlewareInterface {
     use(request: any, response: any, next: (err: any) => any): void {
-        const traceId = new TraceIdUtil().generateTraceId();
+        const traceId = TraceIdUtil.generateTraceId();
         new LoggerUtil().setTraceId(traceId);
         new LoggerUtil().log("traceIdLogger", traceId)
         next(null);

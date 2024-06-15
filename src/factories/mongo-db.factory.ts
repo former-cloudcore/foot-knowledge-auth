@@ -1,7 +1,5 @@
 import {Db, MongoClient} from "mongodb";
-import {singleton} from "../decorators/singleton.decorator";
 
-@singleton
 export class MongoDbFactory {
     private dbs: Record<string, Db> = {};
     private client: MongoClient;

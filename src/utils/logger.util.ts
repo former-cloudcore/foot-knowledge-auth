@@ -1,8 +1,12 @@
-import { singleton } from "../decorators/singleton.decorator";
-
-@singleton
 export class LoggerUtil {
+
     private traceId: string = '';
+    private static instance: LoggerUtil;
+
+    static getInstance() {
+        this.instance ??= new LoggerUtil();
+        return this.instance;
+    }
 
     setTraceId(traceId: string) {
         this.traceId = traceId;

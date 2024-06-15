@@ -1,29 +1,28 @@
-import { MongoDBModule } from "../modules/mongo.module";
-import { DBName } from "../enums/DB-name.enum";
-import { CollectionName } from "../enums/collection-name.enum";
-import { CredentialsDTO, UserDTO } from "../dto/auth/user.dto";
-import { singleton } from "../decorators/singleton.decorator";
+import {MongoDBModule} from "../modules/mongo.module";
+import {DBName} from "../enums/DB-name.enum";
+import {CollectionName} from "../enums/collection-name.enum";
+import {CredentialsDTO, UserDTO} from "../dto/auth/user.dto";
 
-@singleton
 export class AuthBroker {
-    async getUser(email: string): Promise<UserDTO> {
-        return await new MongoDBModule().getOne(DBName.AUTH_DB, CollectionName.USERS, {'credentials.email': email});
+
+    static async getUser(email: string): Promise<UserDTO> {
+        return await MongoDBModule.getInstance().getOne(DBName.AUTH_DB, CollectionName.USERS, {'credentials.email': email});
     }
 
-    async setToken(credentials: CredentialsDTO, token: string): Promise<boolean> {
-        return await new MongoDBModule().setField(DBName.AUTH_DB, CollectionName.USERS, {'credentials.email': credentials.email}, { token });
+    static async setToken(credentials: CredentialsDTO, token: string): Promise<boolean> {
+        return await MongoDBModule.getInstance().setField(DBName.AUTH_DB, CollectionName.USERS, {'credentials.email': credentials.email}, { token });
     }
 
-    async validateToken(token: string): Promise<boolean> {
-        const user = await new MongoDBModule().getOne(DBName.AUTH_DB, CollectionName.USERS, { 'token': token });
+    static async validateToken(token: string): Promise<boolean> {
+        const user = await MongoDBModule.getInstance().getOne(DBName.AUTH_DB, CollectionName.USERS, { 'token': token });
         return !!user;
     }
 
-    async logout(token: string): Promise<boolean> {
-        return await new MongoDBModule().setField(DBName.AUTH_DB, CollectionName.USERS, { token }, { token: null });
+    static async logout(token: string): Promise<boolean> {
+        return await MongoDBModule.getInstance().setField(DBName.AUTH_DB, CollectionName.USERS, { token }, { token: null });
     }
 
-    async createUser(user: UserDTO): Promise<void> {
-        await new MongoDBModule().insertOne(DBName.AUTH_DB, CollectionName.USERS, user);
+    static async createUser(user: UserDTO): Promise<void> {
+        await MongoDBModule.getInstance().insertOne(DBName.AUTH_DB, CollectionName.USERS, user);
     }
 }

@@ -1,17 +1,21 @@
-import { Collection, Db, UpdateResult, InsertOneResult, Document } from 'mongodb';
-import { singleton } from "../decorators/singleton.decorator";
-import { MONGO_URL } from "../config/consts";
-import { DBName } from "../enums/DB-name.enum";
-import { CollectionName } from "../enums/collection-name.enum";
-import { MongoDbFactory } from "../factories/mongo-db.factory";
+import {Collection, Db, UpdateResult, InsertOneResult, Document} from 'mongodb';
+import {MONGO_URL} from "../config/consts";
+import {DBName} from "../enums/DB-name.enum";
+import {CollectionName} from "../enums/collection-name.enum";
+import {MongoDbFactory} from "../factories/mongo-db.factory";
 
-@singleton
 export class MongoDBModule {
 
     private dbFactory: MongoDbFactory;
+    private static instance: MongoDBModule;
 
     constructor() {
         this.dbFactory = new MongoDbFactory(MONGO_URL);
+    }
+
+    static getInstance() {
+        this.instance ??= new MongoDBModule();
+        return this.instance
     }
 
     async getAll(dbName: DBName, collectionName: CollectionName): Promise<any[]> {
@@ -46,7 +50,7 @@ export class MongoDBModule {
             const collectionRef: Collection<Document> | null = await this.getCollectionRef(dbName, collectionName);
             const updateResult: UpdateResult<Document> | undefined = await collectionRef?.updateOne(
                 where,
-                { $set: set }
+                {$set: set}
             );
             success = updateResult?.modifiedCount === 1;
         } catch (error) {

@@ -37,7 +37,7 @@ class Server {
             middlewares: [TraceIdLogger, ErrorHandlingMiddleware],
             defaultErrorHandler: false,
             validation: true,
-            authorizationChecker: (action: Action) => new AuthService().validateToken((action.request.headers["Authorization"] ?? action.request.headers["authorization"])?.replace(AUTH_REPLACE_VALUE, ''))
+            authorizationChecker: (action: Action) => AuthService.validateToken((action.request.headers["Authorization"] ?? action.request.headers["authorization"])?.replace(AUTH_REPLACE_VALUE, ''))
         });
     }
 

@@ -4,7 +4,7 @@
   "description": "Auth",
   "main": "index.js",
   "scripts": {
-    "serve": "tsc -w & nodemon dist/index.js",
+    "serve": "tsc & -w & nodemon dist/index.js",
     "build": "tsc"
   },
   "author": "Former Cloud Core",

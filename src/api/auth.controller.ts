@@ -10,13 +10,13 @@ export class AuthController {
 
     @Post("/authenticate")
     async authenticate(@Body() credentials: CredentialsDTO): Promise<TokenDTO> {
-        const token: string = await new AuthService().authenticate(credentials);
+        const token: string = await AuthService.authenticate(credentials);
         return { token };
     }
 
     @Post("/signup")
     async signup(@Body() signupDTO: SignupDTO): Promise<TokenDTO> {
-        const token: string = await new AuthService().signup(signupDTO);
+        const token: string = await AuthService.signup(signupDTO);
         return { token };
     }
 
@@ -29,6 +29,6 @@ export class AuthController {
     @Authorized()
     @Post("/logout")
     async logout(@HeaderParam("Authorization") token: string): Promise<SuccessDTO> {
-        return { success: await new AuthService().logout(token.replace(AUTH_REPLACE_VALUE, '')) };
+        return { success: await AuthService.logout(token.replace(AUTH_REPLACE_VALUE, '')) };
     }
 }
