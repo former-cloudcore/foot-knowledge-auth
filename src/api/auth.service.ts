@@ -4,6 +4,7 @@ import { CredentialsDTO, SignupDTO, UserDTO } from "../dto/auth/user.dto";
 import { AuthBroker } from "./auth.broker";
 import { StatusCodes } from "http-status-codes";
 import {CustomError} from "../models/custom-error.model";
+import * as uuid from "uuid";
 
 const SECRET_KEY: string = '5017b2cd-76b0-42be-8d76-35a506687b85';
 const DEFAULT_EXPIRY_TIME: string = '24h';
@@ -20,15 +21,14 @@ export class AuthService {
         }
 
         const hashedPassword: string = await hash(password, SALT_ROUNDS);
+        const token: string = await AuthService.generateToken(email);
         const userDTO: UserDTO = {
             ...signupDTO,
-            _id: '',
+            _id: uuid.v4(),
             credentials: { email, password: hashedPassword },
-            token: '',
+            token,
             lastLogin: new Date()
         };
-        const token: string = await AuthService.generateToken(email);
-        userDTO.token = token;
 
         await AuthBroker.createUser(userDTO);
         return token;
