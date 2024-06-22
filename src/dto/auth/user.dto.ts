@@ -17,7 +17,8 @@ export class SignupDTO {
     role: string;
 
     @ValidateNested()
-    @Type(() => CredentialsDTO)    credentials: CredentialsDTO;
+    @Type(() => CredentialsDTO)
+    credentials: CredentialsDTO;
 }
 
 export class UserDTO extends SignupDTO {
