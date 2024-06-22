@@ -1,4 +1,4 @@
-import {Collection, Db, UpdateResult, InsertOneResult, Document} from 'mongodb';
+import {Collection, Db, Document, InsertOneResult, UpdateResult} from 'mongodb';
 import {MONGO_URL} from "../config/consts";
 import {DBName} from "../enums/DB-name.enum";
 import {CollectionName} from "../enums/collection-name.enum";
