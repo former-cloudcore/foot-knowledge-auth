@@ -1,4 +1,4 @@
-import {Authorized, Body, HeaderParam, JsonController, Post} from "routing-controllers";
+import {Authorized, Body, Get, HeaderParam, JsonController, Post} from "routing-controllers";
 import { CredentialsDTO, SignupDTO } from "../dto/auth/user.dto";
 import { AuthService } from "./auth.service";
 import { TokenDTO } from "../dto/auth/token.dto";
@@ -21,7 +21,7 @@ export class AuthController {
     }
 
     @Authorized()
-    @Post("/validateSession")
+    @Get("/validateSession")
     async validateSession(@HeaderParam("Authorization") token: string): Promise<SuccessDTO> {
         return { success: true };
     }
