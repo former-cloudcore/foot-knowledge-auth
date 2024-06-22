@@ -5,23 +5,11 @@ export class ResultDTO {
     @IsNumber()
     type: StatusCodes;
 
+    @IsOptional()
     @IsObject()
     reason: any;
 
     @IsOptional()
-    @IsObject()
-    entity?: any;
-
-    @IsOptional()
-    @IsString()
-    statusMessage?: string;
-
-    @IsOptional()
     @IsArray()
     errors?: Array<any>;
-
-    @IsOptional()
-    @IsObject()
-    @ValidateNested()
-    suggestions?: any;
 }
