@@ -8,7 +8,7 @@ export class ResponseInterceptor implements InterceptorInterface {
         console.log(`Successfully carried out ${action.request.method} on ${action.request.url}`);
         return {
             type: StatusCodes.OK,
-            reason: content
+            ...content
         };
     }
 }

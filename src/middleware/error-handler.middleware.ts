@@ -10,7 +10,6 @@ export class ErrorHandlingMiddleware implements ExpressErrorMiddlewareInterface 
         res.status(error.type).json({
             type: error.type,
             reason: this.produceReason(error),
-            entity: null,
             errors: error?.errors ?? []
         });
     }
