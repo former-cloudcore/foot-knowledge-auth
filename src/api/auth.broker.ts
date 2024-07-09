@@ -14,7 +14,12 @@ export class AuthBroker {
     }
 
     static async validateToken(token: string): Promise<boolean> {
-        const user = await MongoDBModule.getInstance().getOne(DBName.AUTH_DB, CollectionName.USERS, { 'token': token });
+        let user;
+        try {
+            user = await MongoDBModule.getInstance().getOne(DBName.AUTH_DB, CollectionName.USERS, {'token': token});
+        } catch (error) {
+            console.error(error);
+        }
         return !!user;
     }
 
