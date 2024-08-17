@@ -11,10 +11,11 @@ import { ResponseInterceptor } from "./src/interceptors/result.interceptor";
 import { ErrorHandlingMiddleware } from "./src/middleware/error-handler.middleware";
 import { AUTH_REPLACE_VALUE } from "./src/config/consts";
 import { PORT } from "./src/config/consts";
+import { ImageController } from "./src/api/image.controller";
 
 const { defaultMetadataStorage } = require("class-transformer/cjs/storage");
 const routingControllersOptions = {
-    controllers: [AuthController],
+    controllers: [AuthController, ImageController],
     routePrefix: "/api",
 };
 

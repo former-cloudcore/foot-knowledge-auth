@@ -4,6 +4,7 @@ import { CredentialsDTO, SignupDTO, UserDTO } from "../dto/auth/user.dto";
 import { AuthBroker } from "./auth.broker";
 import { StatusCodes } from "http-status-codes";
 import {CustomError} from "../models/custom-error.model";
+import {generateImage} from '../utils/imager-generator.util';
 import * as uuid from "uuid";
 
 const SECRET_KEY: string = '5017b2cd-76b0-42be-8d76-35a506687b85';
@@ -27,7 +28,8 @@ export class AuthService {
             _id: uuid.v4(),
             credentials: { email, password: hashedPassword },
             token,
-            lastLogin: new Date()
+            lastLogin: new Date(),
+            image: 'default-profile-pic.png'
         };
 
         await AuthBroker.createUser(userDTO);
@@ -40,6 +42,22 @@ export class AuthService {
             return AuthBroker.validateToken(token);
         } catch (error) {
             return false;
+        }
+    }
+
+    static async userProfile(token: string): Promise<UserDTO> {
+        return await AuthBroker.userProfile(token);
+    }
+
+    static async generateProfileImage(token: string, prompt: string): Promise<string> {
+        const imageName: string | undefined = await generateImage(prompt);
+        if (!imageName) {
+            throw new CustomError(`Failed to generate profile image for user with token: ${token}`, StatusCodes.INTERNAL_SERVER_ERROR);
+        }
+        if (await AuthBroker.changeUserProfileImage(token, imageName)) {
+            return imageName;
+        } else {
+            throw new CustomError(`Failed to save profile image for user with token: ${token}`, StatusCodes.INTERNAL_SERVER_ERROR);
         }
     }
 
