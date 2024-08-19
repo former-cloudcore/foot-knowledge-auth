@@ -1,6 +1,6 @@
-import {Authorized, Body, Get, HeaderParam, JsonController, Post} from "routing-controllers";
-import { CredentialsDTO, SignupDTO } from "../dto/auth/user.dto";
+import { Authorized, Body, Get, HeaderParam, JsonController, Param, Post, Res } from "routing-controllers";
 import { AuthService } from "./auth.service";
+import { CredentialsDTO, SignupDTO, UserDTO } from "../dto/auth/user.dto";
 import { TokenDTO } from "../dto/auth/token.dto";
 import { SuccessDTO } from "../dto/auth/success.dto";
 import { AUTH_REPLACE_VALUE } from "../config/consts";
@@ -24,6 +24,19 @@ export class AuthController {
     @Get("/validateSession")
     async validateSession(@HeaderParam("Authorization") token: string): Promise<SuccessDTO> {
         return { success: true };
+    }
+
+    @Authorized()
+    @Get("/userProfile")
+    async userProfile(@HeaderParam("Authorization") token: string): Promise<{ name: string, image: string }> {
+        const user: UserDTO = await AuthService.userProfile(token.replace(AUTH_REPLACE_VALUE, ''));
+        return { name: user.name, image: user.image };
+    }
+
+    @Authorized()
+    @Post("/generateProfileImage")
+    async generateProfileImage(@HeaderParam("Authorization") token: string, @Body() body: { prompt: string }): Promise<{ image: string }> {
+        return { image: await AuthService.generateProfileImage(token.replace(AUTH_REPLACE_VALUE, ''), body.prompt) };
     }
 
     @Authorized()

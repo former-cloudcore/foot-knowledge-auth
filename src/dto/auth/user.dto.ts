@@ -30,4 +30,7 @@ export class UserDTO extends SignupDTO {
 
     @IsDate()
     lastLogin: Date;
+
+    @IsString()
+    image: string;
 }

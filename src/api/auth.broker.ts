@@ -9,6 +9,14 @@ export class AuthBroker {
         return await MongoDBModule.getInstance().getOne(DBName.AUTH_DB, CollectionName.USERS, {'credentials.email': email});
     }
 
+    static async userProfile(token: string): Promise<UserDTO> {
+        return await MongoDBModule.getInstance().getOne(DBName.AUTH_DB, CollectionName.USERS, {'token': token});
+    }
+
+    static async changeUserProfileImage(token: string, image: string): Promise<boolean> {
+        return await MongoDBModule.getInstance().setField(DBName.AUTH_DB, CollectionName.USERS, { token }, { image });
+    }
+
     static async setToken(credentials: CredentialsDTO, token: string): Promise<boolean> {
         return await MongoDBModule.getInstance().setField(DBName.AUTH_DB, CollectionName.USERS, {'credentials.email': credentials.email}, { token });
     }
